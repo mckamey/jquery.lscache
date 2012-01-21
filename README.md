@@ -2,30 +2,33 @@ jQuery.lscache()
 ================
 
 This simple jQuery plugin adds an [lscache](http://github.com/pamelafox/lscache) buffer into
-$.ajax() calls (or any fetch method returning a promise object). `lscache` is a Memcached-style
-key-value cache built on top of `localStorage`. The semantics are the same as `$.ajax(options)`
+`jQuery.ajax()` calls (or any fetch method returning a promise object). `lscache` is a Memcached-style
+key-value cache built on top of `localStorage`. The semantics are the same as `$.ajax(settings)`
 but with an additional argument for the cache item.
 
 Requirements
 ------------
 
-- jQuery 1.5 or later. http://jquery.org
+- jQuery 1.5 or later. http://jquery.com
 - lscache: http://github.com/pamelafox/lscache
 
 Usage
 -----
 
 ```
-	$.lscache(cacheItem, fetch|options);
+	$.lscache(object, object|function);
 ```
 
-Where the first argument is the cache item implemented as an object literal with two properties:
+Where the first argument is the cache item, implemented as an object literal with two properties:
 
  - string `key`: lscache key
  - number `time`: time until expiration in minutes (see [lscache](http://github.com/pamelafox/lscache#readme))
 
-The second argument is *either* a callback function to retrieve the item value, or
-an `$.ajax` `options` object to retrive the value via jqXHR.
+The second argument is *either*:
+
+1. A callback function to retrieve the item value, which returns a
+[jQuery.Deferred](http://api.jquery.com/category/deferred-object/) promise object
+2. An [`$.ajax` `settings`](http://api.jquery.com/jQuery.ajax/) object to retrive the value via jqXHR.
 
 Examples
 --------
@@ -94,9 +97,9 @@ that returns a `jQuery.Deferred` promise object. This allows any asynchronous ca
 		});
 ```
 
-By building upon the jQuery.Deferred object, you can actually chain multiple fetch calls together where some of them may be
-populated from lscache and others are remotely fetched, each with their own expiration policies. jQuery provides the
-`$.when` method for this purpose:
+By building upon the [jQuery.Deferred](http://api.jquery.com/category/deferred-object/) object, you can actually chain multiple
+fetch calls together where some of them may be populated from lscache and others are remotely fetched, each with their own
+expiration policies. jQuery provides the [`$.when`](http://api.jquery.com/jQuery.when/) method for this purpose:
 
 ```
 	$.when(
